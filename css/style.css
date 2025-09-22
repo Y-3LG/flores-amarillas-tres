@@ -79,8 +79,13 @@ body{
 }
 
 .description{
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
+    text-align: center;
+    word-break: break-word;
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .button a{
@@ -97,9 +102,11 @@ body{
         text-align: center;
     }
     .description{
-        font-size: 2rem;
+        font-size: 1.1rem;
+        padding: 0 8vw;
+        max-width: 98vw;
+        margin-bottom: 16px;
     }
-    
     .button a{
         font-size: 1rem;
     }
