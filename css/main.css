@@ -1,3 +1,48 @@
+/* Karaoke lyrics scroll effect */
+.lyrics-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.lyrics-focus {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-shadow: 0 2px 12px #000, 0 0 2px #fff;
+  margin: 8px 0;
+  transition: color 0.3s, font-size 0.3s;
+}
+.lyrics-prev, .lyrics-next {
+  color: #bbbbbb;
+  font-size: 0.9em;
+  opacity: 0.7;
+  margin: 2px 0;
+  transition: color 0.3s, font-size 0.3s, opacity 0.3s;
+}
+.lyrics-prev {
+  transform: translateY(-10px);
+}
+.lyrics-next {
+  transform: translateY(10px);
+}
+/* Animación para lyrics */
+.lyrics-animate {
+  animation: lyricsFadeIn 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes lyricsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 *,
 *::after,
 *::before {
@@ -21,8 +66,9 @@ body {
 }
 
 #lyrics {
-  font-size: 28px;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 18px;
+  font-family: Helvetica, sans-serif;
+  font-style: italic;
   color: white;
   position: absolute;
   margin-bottom: 20%;
@@ -41,8 +87,8 @@ body {
 }
 .titulo {
   margin-bottom: 180px;
-  font-family: "Arial Narrow", Arial, sans-serif;
-  color: yellow;
+  font-family: Helvetica, sans-serif;
+  color: rgb(168, 168, 20);
   position: absolute;
   font-weight: bold;
   letter-spacing: 10px;

@@ -4,54 +4,74 @@ var lyrics = document.querySelector("#lyrics");
 
 // Array de objetos que contiene cada línea y su tiempo de aparición en segundos
 var lyricsData = [
-  { text: "At the time", time: 15 },
-  { text: "The whisper of birds", time: 18 },
-  { text: "Lonely before the sun cried", time: 27 },
-  { text: "Fell from the sky", time: 32 },
-  { text: "Like water drops", time: 33 },
-  { text: "Where I'm now? I don't know why", time: 41 },
-  { text: "Nice butterflies in my hands", time: 47 },
-  { text: "Too much light for twilight", time: 54 },
-  { text: "In the mood for the flowers love", time: 59 },
-  { text: "That vision", time: 67 },
-  { text: "Really strong, blew my mind", time: 72 },
-  { text: "Silence Let me see what it was", time: 78 },
-  { text: "I only want to live in clouds", time: 83 },
-  { text: "Where I'm now? I don't know why", time: 91 },
-  { text: "Nice butterflies in my hands", time: 97 },
-  { text: "Too much light for twilight", time: 104 },
-  { text: "In the mood for the flowers love", time: 108 },
-  { text: "At the time", time: 144 },
-  { text: "The whisper of birds", time: 148 },
-  { text: "Lonely before the sun cried", time: 153 },
-  { text: "Fell from the sky", time: 158 },
-  { text: "Like water drops", time: 164 },
-  { text: "Where I'm now? I don't know why", time: 169 },
-  { text: "Nice butterflies in my hands", time: 176 },
-  { text: "Too much light for twilight", time: 183 },
-  { text: "In the mood for the flowers", time: 188 },
-  { text: "Love.", time: 140 },
+  { text: "Qué rico sería", time: 9 },
+  { text: "Intercambiar energías", time: 11 },
+  { text: 'Prender sin decir: "buenos días"', time: 14 },
+  { text: "Hacer el amor y después preguntarte", time: 17 },
+  { text: "¿Cómo dormiste, bebé?", time: 19 },
+  { text: "Si me soñaste", time: 22 },
+  { text: "Quiero saber si con más ganas despertaste", time: 22 },
+  { text: "¿Cómo dormiste, bebé?", time: 28 },
+  { text: "Si me soñaste", time: 32 },
+  { text: "Quiero saber si con más ganas des, mmm", time: 33 },
+  { text: "Mami, respect", time: 38 },
+  { text: "Ese culo tú lo mueves nivel expert", time: 39 },
+  { text: "Hecha de laboratorio como Dexter", time: 44 },
+  { text: "Vivir dentro de ti, mami, quiero ser tu huésped", time: 46 },
+  { text: "So fresh, so juicy, so clean", time: 49 },
+  { text: "Eso de abajo se lo sobo con cream", time: 51 },
+  { text: "Sabe qué pasa si le quito ese jean", time: 54 },
+  { text: "Se le quedó el cachete rojo, supreme (supreme)", time: 56 },
+  { text: "A ella le gusta agresivo", time: 59 },
+  { text: "Que la calienten con dembow", time: 62 },
+  { text: "Y yo soy fan de ese pussy rose", time: 64 },
+  { text: "La puse a gritar, se quedó sin voz", time: 66 },
+  { text: "En la calle una dama", time: 69 },
+  { text: "Pero pone cara 'e puta cuando me lo mama", time: 71 },
+  { text: "A mí no, pero a mi bicho lo ama", time: 73 },
+  { text: "Perdona groserías, se me olvida preguntarte", time: 76 },
+  { text: "¿Cómo dormiste, bebé?", time: 80 },
+  { text: "Si me soñaste", time: 82 },
+  { text: "Quiero saber si con más ganas despertaste", time: 85 },
+  { text: "¿Cómo dormiste, bebé?", time: 89 },
+  { text: "Si me soñaste", time: 92 },
+  { text: "Quiero saber si con más ganas de mmm", time: 94 },
+  { text: "Yeah-yeah, ah", time: 99 },
+  { text: "Skinny", time: 101 },
+  { text: "Oh, eh, ja", time: 102 },
+  { text: "Oh-yeah, oh-yeah, mmm", time: 106 },
 ];
 
 // Animar las letras
 function updateLyrics() {
-  var time = Math.floor(audio.currentTime);
-  var currentLine = lyricsData.find(
-    (line) => time >= line.time && time < line.time + 6
-  );
+  var time = audio.currentTime;
+  // Buscar el índice de la línea enfocada (la más cercana pero no mayor al tiempo actual)
+  var focusIdx = lyricsData.findIndex((line, i) => {
+    var next = lyricsData[i + 1];
+    return time >= line.time && (!next || time < next.time);
+  });
 
-  if (currentLine) {
-    // Calcula la opacidad basada en el tiempo en la línea actual
-    var fadeInDuration = 0.1; // Duración del efecto de aparición en segundos
-    var opacity = Math.min(1, (time - currentLine.time) / fadeInDuration);
+  // Tomar la línea anterior, la enfocada y la siguiente
+  var lines = [];
+  if (focusIdx > 0) lines.push({text: lyricsData[focusIdx - 1].text, class: 'lyrics-prev'});
+  if (focusIdx >= 0) lines.push({text: lyricsData[focusIdx].text, class: 'lyrics-focus'});
+  if (focusIdx >= 0 && focusIdx < lyricsData.length - 1) lines.push({text: lyricsData[focusIdx + 1].text, class: 'lyrics-next'});
 
-    // Aplica el efecto de aparición
-    lyrics.style.opacity = opacity;
-    lyrics.innerHTML = currentLine.text;
+  if (lines.length > 0) {
+    var html = `<div class="lyrics-scroll">` +
+      lines.map(l => `<div class="${l.class}">${l.text}</div>`).join('') +
+      `</div>`;
+    if (lyrics.innerHTML !== html) {
+      lyrics.innerHTML = html;
+      lyrics.classList.remove('lyrics-animate');
+      void lyrics.offsetWidth;
+      lyrics.classList.add('lyrics-animate');
+    }
+    lyrics.style.opacity = 1;
   } else {
-    // Restablece la opacidad y el contenido si no hay una línea actual
     lyrics.style.opacity = 0;
     lyrics.innerHTML = "";
+    lyrics.classList.remove('lyrics-animate');
   }
 }
 
